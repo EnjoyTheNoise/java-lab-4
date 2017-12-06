@@ -37,6 +37,7 @@ public abstract class Figure implements Runnable, ActionListener {
 	private int width;
 	private int height;
 	private Color clr;
+	boolean isPaused;			//flaga pauzowania
 
 	protected static final Random rand = new Random();
 
@@ -56,9 +57,18 @@ public abstract class Figure implements Runnable, ActionListener {
 		// (tworzenie figury i przygotowanie transformacji)
 
 	}
+	
+	public void pause() { 			//pauzowanie w¹tku
+	    this.isPaused = true;
+	}
+	
+	public void unpause() { 			//uruchamianie dalej
+	    this.isPaused = false;
+	}
 
 	@Override
 	public void run() {
+		isPaused = false;
 		// przesuniecie na srodek
 		aft.translate(100, 100);
 		area.transform(aft);
@@ -71,6 +81,11 @@ public abstract class Figure implements Runnable, ActionListener {
 				Thread.sleep(delay);
 			} catch (InterruptedException e) {
 			}
+			while(isPaused)						//jeœli w¹tek jest spauzowany, czekamy 5ms i sprawdzamy raz jeszcze
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+				}
 		}
 	}
 
@@ -83,10 +98,22 @@ public abstract class Figure implements Runnable, ActionListener {
 		int cx = bounds.x + bounds.width / 2;
 		int cy = bounds.y + bounds.height / 2;
 		// odbicie
-		if (cx < 0 || cx > width)
+		if(cx - bounds.height / 2 < 0) {
+			if(dx < 0)
 			dx = -dx;
-		if (cy < 0 || cy > height)
+		}
+		else if(cx + bounds.height / 2 > width) {
+			if(dx > 0)
+			dx = -dx;
+		}
+		else if(cy - bounds.width / 2 < 0) {
+			if(dy < 0)
 			dy = -dy;
+		}
+		else if(cy + bounds.width / 2 > height) {
+			if(dy > 0)
+			dy = -dy;
+		}
 		// zwiekszenie lub zmniejszenie
 		if (bounds.height > height / 3 || bounds.height < 10)
 			sf = 1 / sf;

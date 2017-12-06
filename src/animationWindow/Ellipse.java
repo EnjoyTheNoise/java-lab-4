@@ -5,11 +5,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 
-public class Elipsa extends Figure {
+public class Ellipse extends Figure {
 	
-	public Elipsa(Graphics2D buffer, int delay, int width, int height){
+	public Ellipse(Graphics2D buffer, int delay, int width, int height){
 		super(buffer,delay,width,height);
-		shape = new Ellipse2D.Double(0, 0, width, height);
+		shape = new Ellipse2D.Double(0, 0, 25, 15);
 		aft = new AffineTransform();
 		area = new Area(shape);
 	}
